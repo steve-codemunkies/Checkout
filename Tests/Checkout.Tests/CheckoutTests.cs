@@ -25,4 +25,17 @@ namespace Checkout.Tests
         void Scan(string item);
         int GetTotalPrice();
     }
+
+    public class Checkout : ICheckout
+    {
+        public void Scan(string item)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetTotalPrice()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }
