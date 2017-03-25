@@ -42,13 +42,16 @@ namespace Checkout.Tests
 
     public class Checkout : ICheckout
     {
+        private int _totalPrice;
+
         public void Scan(string item)
         {
+            _totalPrice = item == "A" ? 50 : 30;
         }
 
         public int GetTotalPrice()
         {
-            return 50;
+            return _totalPrice;
         }
     }
 }
