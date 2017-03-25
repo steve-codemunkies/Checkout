@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using Xunit;
 
 namespace Checkout.Tests
 {
@@ -17,5 +18,11 @@ namespace Checkout.Tests
             // Assert
             result.Should().Be(50);
         }
+    }
+
+    public interface ICheckout
+    {
+        void Scan(string item);
+        int GetTotalPrice();
     }
 }
