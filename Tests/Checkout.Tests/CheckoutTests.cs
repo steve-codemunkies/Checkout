@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Checkout.Tests
 {
-    public class CheckoutTests
+    public class CheckoutIntegrationTests
     {
         [Theory]
         [InlineData("A", 50)]
