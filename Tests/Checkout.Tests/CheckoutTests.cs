@@ -18,6 +18,20 @@ namespace Checkout.Tests
             // Assert
             result.Should().Be(50);
         }
+
+        [Fact]
+        public void WhenScanningOneItemBThenTheTotalPriceShouldBeThirty()
+        {
+            // Arrange
+            ICheckout checkout = new Checkout();
+
+            // Act
+            checkout.Scan("B");
+            var result = checkout.GetTotalPrice();
+
+            // Assert
+            result.Should().Be(30);
+        }
     }
 
     public interface ICheckout
