@@ -25,6 +25,12 @@ namespace Checkout.Tests
             var item = AutoFixture.Create<string>();
             var expectedPrice = AutoFixture.Create<int>();
 
+            var calculator =  Mocker.GetMock<ISkuPriceCalculator>();
+            calculator.Setup(calc => calc.TotalPrice()).Returns(expectedPrice);
+            Mocker.GetMock<ISkuPriceCalculatorFactory>()
+                .Setup(factory => factory.Build(item))
+                .Returns(calculator.Object);
+
             // Act
             subject.Scan(item);
             var result = subject.GetTotalPrice();
@@ -32,6 +38,16 @@ namespace Checkout.Tests
             // Assert
             result.Should().Be(expectedPrice);
         }
+    }
+
+    public interface ISkuPriceCalculatorFactory
+    {
+        ISkuPriceCalculator Build(string item);
+    }
+
+    public interface ISkuPriceCalculator
+    {
+        int TotalPrice();
     }
 
     public interface ICheckout
