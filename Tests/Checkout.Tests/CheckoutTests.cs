@@ -5,46 +5,21 @@ namespace Checkout.Tests
 {
     public class CheckoutTests
     {
-        [Fact]
-        public void WhenScanningOneItemAThenTheTotalPriceShouldBeFifty()
+        [Theory]
+        [InlineData("A", 50)]
+        [InlineData("B", 30)]
+        [InlineData("C", 20)]
+        public void WhenScanningAnItemThenTheTotalPriceShouldBeAsExpected(string item, int expectedTotal)
         {
             // Arrange
             ICheckout checkout = new Checkout();
 
             // Act
-            checkout.Scan("A");
+            checkout.Scan(item);
             var result = checkout.GetTotalPrice();
 
             // Assert
-            result.Should().Be(50);
-        }
-
-        [Fact]
-        public void WhenScanningOneItemBThenTheTotalPriceShouldBeThirty()
-        {
-            // Arrange
-            ICheckout checkout = new Checkout();
-
-            // Act
-            checkout.Scan("B");
-            var result = checkout.GetTotalPrice();
-
-            // Assert
-            result.Should().Be(30);
-        }
-
-        [Fact]
-        public void WhenScanningOneItemCThenTheTotalPriceShouldBeTwenty()
-        {
-            // Arrange
-            ICheckout checkout = new Checkout();
-
-            // Act
-            checkout.Scan("C");
-            var result = checkout.GetTotalPrice();
-
-            // Assert
-            result.Should().Be(20);
+            result.Should().Be(expectedTotal);
         }
     }
 
