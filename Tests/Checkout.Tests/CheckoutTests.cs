@@ -165,6 +165,68 @@ namespace Checkout.Tests
             result.Should().Be(expectedPrice);
             calculator.Verify(calc => calc.IncrementItemCount(), Times.Exactly(numberOfScans - 1));
         }
+
+        internal class ItemTestDetails
+        {
+            public ItemTestDetails(string item, int expectedPrice, int scanCount, Mock<ISkuPriceCalculator> skuPriceCalculatorMock)
+            {
+                Item = item;
+                ExpectedPrice = expectedPrice;
+                ScanCount = scanCount;
+                SkuPriceCalculatorMock = skuPriceCalculatorMock;
+            }
+
+            public string Item { get; private set; }
+            public int ExpectedPrice { get; private set; }
+            public int ScanCount { get; private set; }
+            public Mock<ISkuPriceCalculator> SkuPriceCalculatorMock { get; private set; }
+        }
+
+        [Fact]
+        public void WhenScanningNUniqueItemsUpToMTimesThenThePriceIsTheExpectedPrice()
+        {
+            // Arrange
+            ICheckout subject = Mocker.CreateInstance<Checkout>();
+
+            var itemCount = Random.Next(1, 11);
+            var itemList = new List<ItemTestDetails>();
+            for (var i = 0; i < itemCount; i++)
+            {
+                var testDetails = new ItemTestDetails(AutoFixture.Create<string>(), AutoFixture.Create<int>(),
+                    Random.Next(1, 11), new Mock<ISkuPriceCalculator>());
+
+                testDetails.SkuPriceCalculatorMock.Setup(calc => calc.TotalPrice()).Returns(testDetails.ExpectedPrice);
+                testDetails.SkuPriceCalculatorMock.Setup(calc => calc.IsCalculatingPriceForItem(testDetails.Item))
+                    .Returns(true);
+                Mocker.GetMock<ISkuPriceCalculatorFactory>()
+                    .Setup(factory => factory.Build(testDetails.Item))
+                    .Returns(testDetails.SkuPriceCalculatorMock.Object);
+                itemList.Add(testDetails);
+            }
+
+            var scanList = new List<string>();
+            foreach (var itemTestDetails in itemList)
+            {
+                for (int i = 0; i < itemTestDetails.ScanCount; i++)
+                {
+                    scanList.Add(itemTestDetails.Item);
+                }
+            }
+
+            // Act
+            foreach (var item in scanList)
+            {
+                subject.Scan(item);
+            }
+            var result = subject.GetTotalPrice();
+
+            // Assert
+            result.Should().Be(itemList.Sum(itd => itd.ExpectedPrice));
+            foreach (var itemTestDetails in itemList)
+            {
+                itemTestDetails.SkuPriceCalculatorMock.Verify(calc => calc.IncrementItemCount(), Times.Exactly(itemTestDetails.ScanCount - 1));
+            }
+        }
     }
 
     public interface ISkuPriceCalculatorFactory
