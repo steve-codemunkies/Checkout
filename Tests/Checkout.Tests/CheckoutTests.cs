@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -12,11 +13,13 @@ namespace Checkout.Tests
     {
         public Fixture AutoFixture { get; set; }
         public AutoMocker Mocker { get; set; }
+        public Random Random { get; set; }
 
         public CheckoutTests()
         {
             AutoFixture = new Fixture();
             Mocker = new AutoMocker();
+            Random = new Random((int)DateTime.UtcNow.Ticks);
         }
 
         [Fact]
@@ -71,6 +74,40 @@ namespace Checkout.Tests
 
             // Assert
             result.Should().Be(expectedPrice1 + expectedPrice2);
+        }
+
+        [Fact]
+        public void WhenScanningNUniqueItemsThenThePriceIsTheExpectedPrice()
+        {
+            // Arrange
+            ICheckout subject = Mocker.CreateInstance<Checkout>();
+
+            var itemCount = Random.Next(1, 11);
+            var itemList = new List<string>();
+            var totalExpectedPrice = 0;
+            for(var i = 0; i < itemCount; i++)
+            {
+                var item = AutoFixture.Create<string>();
+                itemList.Add(item);
+                var expectedPrice = AutoFixture.Create<int>();
+                totalExpectedPrice += expectedPrice;
+
+                var calculator = new Mock<ISkuPriceCalculator>();
+                calculator.Setup(calc => calc.TotalPrice()).Returns(expectedPrice);
+                Mocker.GetMock<ISkuPriceCalculatorFactory>()
+                    .Setup(factory => factory.Build(item))
+                    .Returns(calculator.Object);
+            }
+
+            // Act
+            foreach (var item in itemList)
+            {
+                subject.Scan(item);
+            }
+            var result = subject.GetTotalPrice();
+
+            // Assert
+            result.Should().Be(totalExpectedPrice);
         }
     }
 
