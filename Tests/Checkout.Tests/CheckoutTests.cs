@@ -58,16 +58,22 @@ namespace Checkout.Tests
 
     public class Checkout : ICheckout
     {
-        private int _totalPrice;
+        private readonly ISkuPriceCalculatorFactory _skuPriceCalculatorFactory;
+        private ISkuPriceCalculator _skuPriceCalculator;
+
+        public Checkout(ISkuPriceCalculatorFactory skuPriceCalculatorFactory)
+        {
+            _skuPriceCalculatorFactory = skuPriceCalculatorFactory;
+        }
 
         public void Scan(string item)
         {
-            _totalPrice = item == "A" ? 50 : item == "B" ? 30 : item == "C" ? 20 : 15;
+            _skuPriceCalculator = _skuPriceCalculatorFactory.Build(item);
         }
 
         public int GetTotalPrice()
         {
-            return _totalPrice;
+            return _skuPriceCalculator.TotalPrice();
         }
     }
 }

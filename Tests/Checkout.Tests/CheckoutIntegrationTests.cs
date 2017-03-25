@@ -14,7 +14,7 @@ namespace Checkout.Tests
         public void WhenScanningItemsThenTheTotalPriceShouldBeAsExpected(string items, int expectedTotal)
         {
             // Arrange
-            ICheckout checkout = new Checkout();
+            ICheckout checkout = null; //new Checkout();
 
             // Act
             var itemArray = items.Split(';');
