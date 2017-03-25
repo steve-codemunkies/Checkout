@@ -1,5 +1,39 @@
-﻿namespace Checkout.Tests
+﻿using FluentAssertions;
+using Moq.AutoMock;
+using Ploeh.AutoFixture;
+using Xunit;
+
+namespace Checkout.Tests
 {
+    public class CheckoutTests
+    {
+        public Fixture AutoFixture { get; set; }
+        public AutoMocker Mocker { get; set; }
+
+        public CheckoutTests()
+        {
+            AutoFixture = new Fixture();
+            Mocker = new AutoMocker();
+        }
+
+        [Fact]
+        public void WhenScanningAUniqueItemThenThePriceIsTheExpectedPrice()
+        {
+            // Arrange
+            ICheckout subject = Mocker.CreateInstance<Checkout>();
+
+            var item = AutoFixture.Create<string>();
+            var expectedPrice = AutoFixture.Create<int>();
+
+            // Act
+            subject.Scan(item);
+            var result = subject.GetTotalPrice();
+
+            // Assert
+            result.Should().Be(expectedPrice);
+        }
+    }
+
     public interface ICheckout
     {
         void Scan(string item);
