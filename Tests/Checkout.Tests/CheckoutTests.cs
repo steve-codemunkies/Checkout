@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Checkout.Interfaces;
 using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
@@ -226,55 +227,6 @@ namespace Checkout.Tests
             {
                 itemTestDetails.SkuPriceCalculatorMock.Verify(calc => calc.IncrementItemCount(), Times.Exactly(itemTestDetails.ScanCount - 1));
             }
-        }
-    }
-
-    public interface ISkuPriceCalculatorFactory
-    {
-        ISkuPriceCalculator Build(string item);
-    }
-
-    public interface ISkuPriceCalculator
-    {
-        int TotalPrice();
-        void IncrementItemCount();
-        bool IsCalculatingPriceForItem(string item);
-    }
-
-    public interface ICheckout
-    {
-        void Scan(string item);
-        int GetTotalPrice();
-    }
-
-    public class Checkout : ICheckout
-    {
-        private readonly ISkuPriceCalculatorFactory _skuPriceCalculatorFactory;
-        private readonly List<ISkuPriceCalculator> _skuPriceCalculatorList;
-
-        public Checkout(ISkuPriceCalculatorFactory skuPriceCalculatorFactory)
-        {
-            _skuPriceCalculatorFactory = skuPriceCalculatorFactory;
-            _skuPriceCalculatorList = new List<ISkuPriceCalculator>();
-        }
-
-        public void Scan(string item)
-        {
-            var calculator = _skuPriceCalculatorList.Find(calc => calc.IsCalculatingPriceForItem(item));
-
-            if (calculator == null)
-            {
-                _skuPriceCalculatorList.Add(_skuPriceCalculatorFactory.Build(item));
-            }
-            else
-            {
-                calculator.IncrementItemCount();
-            }
-        }
-
-        public int GetTotalPrice()
-        {
-            return _skuPriceCalculatorList.Sum(calculator => calculator.TotalPrice());
         }
     }
 }

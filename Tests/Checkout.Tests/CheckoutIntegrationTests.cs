@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Checkout.Interfaces;
+using FluentAssertions;
 using Xunit;
 
 namespace Checkout.Tests
