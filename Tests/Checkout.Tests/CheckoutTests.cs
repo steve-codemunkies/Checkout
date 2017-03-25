@@ -36,7 +36,7 @@ namespace Checkout.Tests
 
         public void Scan(string item)
         {
-            _totalPrice = item == "A" ? 50 : item == "B" ? 30 : 20;
+            _totalPrice = item == "A" ? 50 : item == "B" ? 30 : item == "C" ? 20 : 15;
         }
 
         public int GetTotalPrice()
