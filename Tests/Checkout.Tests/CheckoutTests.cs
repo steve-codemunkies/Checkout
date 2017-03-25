@@ -109,6 +109,31 @@ namespace Checkout.Tests
             // Assert
             result.Should().Be(totalExpectedPrice);
         }
+
+        [Fact]
+        public void WhenAnItemIsScannedTwiceThenThePriceIsTheExpectedPrice()
+        {
+            // Arrange
+            ICheckout subject = Mocker.CreateInstance<Checkout>();
+
+            var item = AutoFixture.Create<string>();
+            var expectedPrice = AutoFixture.Create<int>();
+
+            var calculator = Mocker.GetMock<ISkuPriceCalculator>();
+            calculator.Setup(calc => calc.TotalPrice()).Returns(expectedPrice);
+            Mocker.GetMock<ISkuPriceCalculatorFactory>()
+                .Setup(factory => factory.Build(item))
+                .Returns(calculator.Object);
+
+            // Act
+            subject.Scan(item);
+            subject.Scan(item);
+            var result = subject.GetTotalPrice();
+
+            // Assert
+            result.Should().Be(expectedPrice);
+            calculator.Verify(calc => calc.IncrementItemCount(), Times.Once());
+        }
     }
 
     public interface ISkuPriceCalculatorFactory
@@ -119,6 +144,7 @@ namespace Checkout.Tests
     public interface ISkuPriceCalculator
     {
         int TotalPrice();
+        void IncrementItemCount();
     }
 
     public interface ICheckout
