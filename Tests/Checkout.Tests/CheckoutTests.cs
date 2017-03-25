@@ -9,6 +9,7 @@ namespace Checkout.Tests
         [InlineData("A", 50)]
         [InlineData("B", 30)]
         [InlineData("C", 20)]
+        [InlineData("D", 15)]
         public void WhenScanningAnItemThenTheTotalPriceShouldBeAsExpected(string item, int expectedTotal)
         {
             // Arrange
