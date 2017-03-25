@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using Ploeh.AutoFixture;
@@ -91,21 +93,22 @@ namespace Checkout.Tests
     public class Checkout : ICheckout
     {
         private readonly ISkuPriceCalculatorFactory _skuPriceCalculatorFactory;
-        private ISkuPriceCalculator _skuPriceCalculator;
+        private readonly List<ISkuPriceCalculator> _skuPriceCalculatorList;
 
         public Checkout(ISkuPriceCalculatorFactory skuPriceCalculatorFactory)
         {
             _skuPriceCalculatorFactory = skuPriceCalculatorFactory;
+            _skuPriceCalculatorList = new List<ISkuPriceCalculator>();
         }
 
         public void Scan(string item)
         {
-            _skuPriceCalculator = _skuPriceCalculatorFactory.Build(item);
+            _skuPriceCalculatorList.Add(_skuPriceCalculatorFactory.Build(item));
         }
 
         public int GetTotalPrice()
         {
-            return _skuPriceCalculator.TotalPrice();
+            return _skuPriceCalculatorList.Sum(calculator => calculator.TotalPrice());
         }
     }
 }
