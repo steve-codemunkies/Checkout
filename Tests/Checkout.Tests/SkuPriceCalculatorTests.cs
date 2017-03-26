@@ -162,7 +162,12 @@ namespace Checkout.Tests
 
         public int TotalPrice()
         {
-            return _multiBuyItemCount.HasValue && _multiBuyPrice.HasValue && _multiBuyItemCount.Value == this._count ? _multiBuyPrice.Value : _unitPrice * _count;
+            if (_multiBuyItemCount.HasValue && _multiBuyPrice.HasValue && _count >= _multiBuyItemCount.Value)
+            {
+                return (_count / _multiBuyItemCount.Value) * _multiBuyPrice.Value;
+            }
+
+            return _unitPrice * _count;
         }
 
         public void IncrementItemCount()
