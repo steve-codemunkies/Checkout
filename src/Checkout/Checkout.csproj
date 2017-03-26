@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Checkout.cs" />
     <Compile Include="Data\Dto\SkuWithMultiBuy.cs" />
+    <Compile Include="Data\GetSkuWithMultiBuy.cs" />
     <Compile Include="Data\IGetSkuWithMultiBuy.cs" />
     <Compile Include="Exception\SkuNotFoundException.cs" />
     <Compile Include="Interfaces\ICheckout.cs" />
