@@ -86,6 +86,7 @@ namespace Checkout.Tests
 
     public class SkuPriceCalculator : ISkuPriceCalculator
     {
+        private int _count = 1;
         private readonly string _item;
         private readonly int _unitPrice;
 
@@ -97,12 +98,12 @@ namespace Checkout.Tests
 
         public int TotalPrice()
         {
-            return _unitPrice;
+            return _unitPrice * _count;
         }
 
         public void IncrementItemCount()
         {
-            throw new System.NotImplementedException();
+            _count++;
         }
 
         public bool IsCalculatingPriceForItem(string item)
