@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\dbo\SkuWithMultiBuy.sql" />
+    <None Include="Checkout.Database.dev.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment1.sql" />
