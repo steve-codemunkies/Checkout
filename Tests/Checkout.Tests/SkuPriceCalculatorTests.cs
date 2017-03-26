@@ -105,14 +105,14 @@ namespace Checkout.Tests
         }
 
         [Fact]
-        public void WhenCalculatingThePriceOfAnItemWithAMultiBuySpecialOffer()
+        public void WhenCalculatingThePriceOf3ItemsWithAMultiBuySpecialOffer()
         {
             // Arrange
             var item = AutoFixture.Create<string>();
             var singlePrice = 50;
             var multiBuyItemCount = 3;
             var multiBuyPrice = 130;
-            var subject = new SkuPriceCalculator(item, singlePrice);
+            var subject = new SkuPriceCalculator(item, singlePrice, multiBuyItemCount, multiBuyPrice);
 
             // Act
             subject.IncrementItemCount();
@@ -128,16 +128,20 @@ namespace Checkout.Tests
         private int _count = 1;
         private readonly string _item;
         private readonly int _unitPrice;
+        private readonly int? _multiBuyItemCount;
+        private readonly int? _multiBuyPrice;
 
-        public SkuPriceCalculator(string item, int unitPrice)
+        public SkuPriceCalculator(string item, int unitPrice, int? multiBuyItemCount = null, int? multiBuyPrice = null)
         {
             _item = item;
             _unitPrice = unitPrice;
+            _multiBuyItemCount = multiBuyItemCount;
+            _multiBuyPrice = multiBuyPrice;
         }
 
         public int TotalPrice()
         {
-            return _unitPrice * _count;
+            return _multiBuyItemCount.HasValue && _multiBuyPrice.HasValue && _multiBuyItemCount.Value == this._count ? _multiBuyPrice.Value : _unitPrice * _count;
         }
 
         public void IncrementItemCount()
