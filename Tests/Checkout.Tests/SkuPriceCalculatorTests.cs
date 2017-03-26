@@ -26,4 +26,22 @@ namespace Checkout.Tests
             subject.IsCalculatingPriceForItem(item).Should().Be(true);
         }
     }
+
+    public class SkuPriceCalculator : ISkuPriceCalculator
+    {
+        public int TotalPrice()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void IncrementItemCount()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsCalculatingPriceForItem(string item)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }
