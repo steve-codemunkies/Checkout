@@ -51,6 +51,19 @@ namespace Checkout.Tests
             // Assert
             subject.IsCalculatingPriceForItem(item.ToLowerInvariant()).Should().Be(true);
         }
+
+        [Fact]
+        public void WhenInitiallyNewedTheCalculatorReturnsTheExpectedPrice()
+        {
+            // Arrange
+            var item = AutoFixture.Create<string>();
+            var expectedPrice = AutoFixture.Create<int>();
+            var subject = new SkuPriceCalculator(item);
+
+            // Act
+            // Assert
+            subject.TotalPrice().Should().Be(expectedPrice);
+        }
     }
 
     public class SkuPriceCalculator : ISkuPriceCalculator
