@@ -20,7 +20,8 @@ namespace Checkout.Tests
         {
             // Arrange
             var item = AutoFixture.Create<string>();
-            ISkuPriceCalculator subject = new SkuPriceCalculator(item);
+            var expectedPrice = AutoFixture.Create<int>();
+            ISkuPriceCalculator subject = new SkuPriceCalculator(item, expectedPrice);
 
             // Act
             // Assert
@@ -32,7 +33,8 @@ namespace Checkout.Tests
         {
             // Arrange
             var item = AutoFixture.Create<string>();
-            ISkuPriceCalculator subject = new SkuPriceCalculator(item);
+            var expectedPrice = AutoFixture.Create<int>();
+            ISkuPriceCalculator subject = new SkuPriceCalculator(item, expectedPrice);
 
             // Act
             // Assert
@@ -45,7 +47,8 @@ namespace Checkout.Tests
         {
             // Arrange
             var item = AutoFixture.Create<string>();
-            ISkuPriceCalculator subject = new SkuPriceCalculator(item.ToUpperInvariant());
+            var expectedPrice = AutoFixture.Create<int>();
+            ISkuPriceCalculator subject = new SkuPriceCalculator(item.ToUpperInvariant(), expectedPrice);
 
             // Act
             // Assert
@@ -58,7 +61,7 @@ namespace Checkout.Tests
             // Arrange
             var item = AutoFixture.Create<string>();
             var expectedPrice = AutoFixture.Create<int>();
-            var subject = new SkuPriceCalculator(item);
+            var subject = new SkuPriceCalculator(item, expectedPrice);
 
             // Act
             // Assert
@@ -69,15 +72,17 @@ namespace Checkout.Tests
     public class SkuPriceCalculator : ISkuPriceCalculator
     {
         private readonly string _item;
+        private readonly int _unitPrice;
 
-        public SkuPriceCalculator(string item)
+        public SkuPriceCalculator(string item, int unitPrice)
         {
             _item = item;
+            _unitPrice = unitPrice;
         }
 
         public int TotalPrice()
         {
-            throw new System.NotImplementedException();
+            return _unitPrice;
         }
 
         public void IncrementItemCount()
