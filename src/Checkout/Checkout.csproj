@@ -41,11 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checkout.cs" />
+    <Compile Include="Data\Dto\SkuWithMultiBuy.cs" />
+    <Compile Include="Data\IGetSkuWithMultiBuy.cs" />
+    <Compile Include="Exception\SkuNotFoundException.cs" />
     <Compile Include="Interfaces\ICheckout.cs" />
     <Compile Include="Interfaces\ISkuPriceCalculator.cs" />
     <Compile Include="Interfaces\ISkuPriceCalculatorFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkuPriceCalculator.cs" />
+    <Compile Include="SkuPriceCalculatorFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

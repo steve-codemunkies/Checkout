@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Checkout.Data;
+using Checkout.Data.Dto;
+using Checkout.Exception;
 using Checkout.Interfaces;
 using FluentAssertions;
 using Moq.AutoMock;
@@ -77,52 +79,6 @@ namespace Checkout.Tests
 
             // Assert
             exception.Item.Should().Be(expectedItem);
-        }
-    }
-
-    public class SkuNotFoundException : Exception
-    {
-        public SkuNotFoundException(string item)
-        {
-            Item = item;
-        }
-
-        public string Item { get; private set; }
-    }
-
-    public interface IGetSkuWithMultiBuy
-    {
-        SkuWithMultiBuy Query(string item);
-    }
-
-    public class SkuWithMultiBuy
-    {
-        public string Item { get; set; }
-        public int UnitPrice { get; set; }
-        public int? MultiBuyItemCount { get; set; }
-        public int? MultiBuyPrice { get; set; }
-    }
-
-    public class SkuPriceCalculatorFactory : ISkuPriceCalculatorFactory
-    {
-        private readonly IGetSkuWithMultiBuy _getSkuWithMultiBuy;
-
-        public SkuPriceCalculatorFactory(IGetSkuWithMultiBuy getSkuWithMultiBuy)
-        {
-            _getSkuWithMultiBuy = getSkuWithMultiBuy;
-        }
-
-        public ISkuPriceCalculator Build(string item)
-        {
-            var skuWithMultiBuy = _getSkuWithMultiBuy.Query(item);
-
-            if (skuWithMultiBuy == null)
-            {
-                throw new SkuNotFoundException(item);
-            }
-
-            return new SkuPriceCalculator(skuWithMultiBuy.Item, skuWithMultiBuy.UnitPrice,
-                skuWithMultiBuy.MultiBuyItemCount, skuWithMultiBuy.MultiBuyPrice);
         }
     }
 }
