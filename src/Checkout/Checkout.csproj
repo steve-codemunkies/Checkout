@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentNHibernate, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
       <Private>True</Private>
@@ -59,6 +63,7 @@
     <Compile Include="Interfaces\ICheckout.cs" />
     <Compile Include="Interfaces\ISkuPriceCalculator.cs" />
     <Compile Include="Interfaces\ISkuPriceCalculatorFactory.cs" />
+    <Compile Include="Ioc\DatabaseModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkuPriceCalculator.cs" />
     <Compile Include="SkuPriceCalculatorFactory.cs" />
