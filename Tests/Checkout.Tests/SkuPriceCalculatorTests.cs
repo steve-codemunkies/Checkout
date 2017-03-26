@@ -1,4 +1,5 @@
-﻿using Checkout.Interfaces;
+﻿using System;
+using Checkout.Interfaces;
 using FluentAssertions;
 using Ploeh.AutoFixture;
 using Xunit;
@@ -73,7 +74,7 @@ namespace Checkout.Tests
 
         public bool IsCalculatingPriceForItem(string item)
         {
-            return _item == item;
+            return string.Compare(_item, item, StringComparison.InvariantCultureIgnoreCase) == 0;
         }
     }
 }
