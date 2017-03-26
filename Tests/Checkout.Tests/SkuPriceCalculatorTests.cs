@@ -38,6 +38,18 @@ namespace Checkout.Tests
             var newItemCode = AutoFixture.Create<string>();
             subject.IsCalculatingPriceForItem(newItemCode).Should().Be(false);
         }
+
+        [Fact]
+        public void WhenCheckingIsCalculatingPriceForItemIgnoringCase()
+        {
+            // Arrange
+            var item = AutoFixture.Create<string>();
+            ISkuPriceCalculator subject = new SkuPriceCalculator(item.ToUpperInvariant());
+
+            // Act
+            // Assert
+            subject.IsCalculatingPriceForItem(item.ToLowerInvariant()).Should().Be(true);
+        }
     }
 
     public class SkuPriceCalculator : ISkuPriceCalculator
