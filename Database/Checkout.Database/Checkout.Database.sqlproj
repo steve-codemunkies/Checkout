@@ -57,5 +57,36 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="SeedData" />
+    <Folder Include="SeedData\dbo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\SkuWithMultiBuy.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SeedData\dbo\SkuWithMultiBuy.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="DeleteData">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__3)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="InsertData">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ProductionDeployment">
+      <DefaultValue>0</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="UpdateData">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__4)</Value>
+    </SqlCmdVariable>
   </ItemGroup>
 </Project>
