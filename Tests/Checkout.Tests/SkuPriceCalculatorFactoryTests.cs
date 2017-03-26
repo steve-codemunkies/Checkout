@@ -115,6 +115,12 @@ namespace Checkout.Tests
         public ISkuPriceCalculator Build(string item)
         {
             var skuWithMultiBuy = _getSkuWithMultiBuy.Query(item);
+
+            if (skuWithMultiBuy == null)
+            {
+                throw new SkuNotFoundException(item);
+            }
+
             return new SkuPriceCalculator(skuWithMultiBuy.Item, skuWithMultiBuy.UnitPrice,
                 skuWithMultiBuy.MultiBuyItemCount, skuWithMultiBuy.MultiBuyPrice);
         }
