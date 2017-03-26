@@ -27,6 +27,8 @@ namespace Checkout.Tests
         [InlineData("C", 20)]
         [InlineData("D", 15)]
         [InlineData("A;a;A", 130)]
+        [InlineData("b;B", 45)]
+        [InlineData("A;B;c;d;a;b;A;A", 260)]
         public void WhenScanningItemsThenTheTotalPriceShouldBeAsExpected(string items, int expectedTotal)
         {
             using (var innerScope = _container.BeginLifetimeScope())
