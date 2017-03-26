@@ -41,7 +41,7 @@ namespace Checkout.Tests
 
         public bool IsCalculatingPriceForItem(string item)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
     }
 }
