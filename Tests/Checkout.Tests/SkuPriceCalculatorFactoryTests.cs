@@ -24,4 +24,12 @@ namespace Checkout.Tests
             result.TotalPrice().Should().Be(130);
         }
     }
+
+    public class SkuPriceCalculatorFactory : ISkuPriceCalculatorFactory
+    {
+        public ISkuPriceCalculator Build(string item)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }
