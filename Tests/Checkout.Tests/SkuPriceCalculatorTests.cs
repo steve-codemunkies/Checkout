@@ -103,6 +103,24 @@ namespace Checkout.Tests
             // Assert
             subject.TotalPrice().Should().Be(expectedPrice * itemCount);
         }
+
+        [Fact]
+        public void WhenCalculatingThePriceOfAnItemWithAMultiBuySpecialOffer()
+        {
+            // Arrange
+            var item = AutoFixture.Create<string>();
+            var singlePrice = 50;
+            var multiBuyItemCount = 3;
+            var multiBuyPrice = 130;
+            var subject = new SkuPriceCalculator(item, singlePrice);
+
+            // Act
+            subject.IncrementItemCount();
+            subject.IncrementItemCount();
+
+            // Assert
+            subject.TotalPrice().Should().Be(multiBuyPrice);
+        }
     }
 
     public class SkuPriceCalculator : ISkuPriceCalculator
