@@ -15,7 +15,7 @@ namespace Checkout.Tests
         }
 
         [Fact]
-        public void WhenBuildSkuPriceCalculatorACorrectlyPopulatedInstanceIsReturned()
+        public void WhenBuildSkuPriceCalculatorForAMultiBuyItemACorrectlyPopulatedInstanceIsReturned()
         {
             // Arrange
             var skuWithMultiBuy = new SkuWithMultiBuy
@@ -29,7 +29,7 @@ namespace Checkout.Tests
             Mocker.GetMock<IGetSkuWithMultiBuy>().Setup(get => get.Query(skuWithMultiBuy.Item)).Returns(skuWithMultiBuy);
 
             // Act
-            var result = subject.Build("A");
+            var result = subject.Build(skuWithMultiBuy.Item);
 
             // Assert
             result.Should().NotBeNull();
@@ -38,6 +38,30 @@ namespace Checkout.Tests
             result.IncrementItemCount();
             result.IncrementItemCount();
             result.TotalPrice().Should().Be(130);
+        }
+
+        [Fact]
+        public void WhenBuildSkuPriceCalculatorForANonMultiBuyItemACorrectlyPopulatedInstanceIsReturned()
+        {
+            // Arrange
+            var skuWithMultiBuy = new SkuWithMultiBuy
+            {
+                Item = "C",
+                UnitPrice = 20
+            };
+            ISkuPriceCalculatorFactory subject = Mocker.CreateInstance<SkuPriceCalculatorFactory>();
+            Mocker.GetMock<IGetSkuWithMultiBuy>().Setup(get => get.Query(skuWithMultiBuy.Item)).Returns(skuWithMultiBuy);
+
+            // Act
+            var result = subject.Build(skuWithMultiBuy.Item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<SkuPriceCalculator>();
+            result.TotalPrice().Should().Be(20);
+            result.IncrementItemCount();
+            result.IncrementItemCount();
+            result.TotalPrice().Should().Be(60);
         }
     }
 
