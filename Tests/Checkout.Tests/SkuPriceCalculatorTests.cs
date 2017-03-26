@@ -19,7 +19,7 @@ namespace Checkout.Tests
         {
             // Arrange
             var item = AutoFixture.Create<string>();
-            ISkuPriceCalculator subject = new SkuPriceCalculator();
+            ISkuPriceCalculator subject = new SkuPriceCalculator(item);
 
             // Act
             // Assert
@@ -30,17 +30,25 @@ namespace Checkout.Tests
         public void WhenCheckingIsNotCalculatingPriceForItem()
         {
             // Arrange
-            ISkuPriceCalculator subject = new SkuPriceCalculator();
+            var item = AutoFixture.Create<string>();
+            ISkuPriceCalculator subject = new SkuPriceCalculator(item);
 
             // Act
             // Assert
-            var item = AutoFixture.Create<string>();
-            subject.IsCalculatingPriceForItem(item).Should().Be(false);
+            var newItemCode = AutoFixture.Create<string>();
+            subject.IsCalculatingPriceForItem(newItemCode).Should().Be(false);
         }
     }
 
     public class SkuPriceCalculator : ISkuPriceCalculator
     {
+        private readonly string _item;
+
+        public SkuPriceCalculator(string item)
+        {
+            _item = item;
+        }
+
         public int TotalPrice()
         {
             throw new System.NotImplementedException();
@@ -53,7 +61,7 @@ namespace Checkout.Tests
 
         public bool IsCalculatingPriceForItem(string item)
         {
-            return true;
+            return _item == item;
         }
     }
 }
