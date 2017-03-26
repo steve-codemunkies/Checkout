@@ -9,10 +9,12 @@ namespace Checkout.Tests
     public class SkuPriceCalculatorTests
     {
         public Fixture AutoFixture { get; set; }
+        public Random Random { get; set; }
 
         public SkuPriceCalculatorTests()
         {
             AutoFixture = new Fixture();
+            Random = new Random((int)DateTime.UtcNow.Ticks);
         }
 
         [Fact]
@@ -81,6 +83,25 @@ namespace Checkout.Tests
 
             // Assert
             subject.TotalPrice().Should().Be(expectedPrice * 2);
+        }
+
+        [Fact]
+        public void WhenCalculatingThePriceForNItemsItShouldReturnTheCorrectPrice()
+        {
+            // Arrange
+            var item = AutoFixture.Create<string>();
+            var expectedPrice = AutoFixture.Create<int>();
+            var itemCount = Random.Next(1, 11);
+            var subject = new SkuPriceCalculator(item, expectedPrice);
+
+            // Act
+            for (var i = 1; i < itemCount; i++)
+            {
+                subject.IncrementItemCount();
+            }
+
+            // Assert
+            subject.TotalPrice().Should().Be(expectedPrice * itemCount);
         }
     }
 
