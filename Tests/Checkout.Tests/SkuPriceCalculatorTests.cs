@@ -25,6 +25,18 @@ namespace Checkout.Tests
             // Assert
             subject.IsCalculatingPriceForItem(item).Should().Be(true);
         }
+
+        [Fact]
+        public void WhenCheckingIsNotCalculatingPriceForItem()
+        {
+            // Arrange
+            ISkuPriceCalculator subject = new SkuPriceCalculator();
+
+            // Act
+            // Assert
+            var item = AutoFixture.Create<string>();
+            subject.IsCalculatingPriceForItem(item).Should().Be(false);
+        }
     }
 
     public class SkuPriceCalculator : ISkuPriceCalculator
