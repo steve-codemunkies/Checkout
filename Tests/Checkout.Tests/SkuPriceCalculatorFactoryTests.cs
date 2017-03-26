@@ -1,4 +1,5 @@
-﻿using Checkout.Interfaces;
+﻿using System;
+using Checkout.Interfaces;
 using FluentAssertions;
 using Moq.AutoMock;
 using Xunit;
@@ -63,6 +64,30 @@ namespace Checkout.Tests
             result.IncrementItemCount();
             result.TotalPrice().Should().Be(60);
         }
+
+        [Fact]
+        public void WhenBuildSkuPriceCalculatorForNonExistantItem()
+        {
+            // Arrange
+            var expectedItem = "A";
+            ISkuPriceCalculatorFactory subject = Mocker.CreateInstance<SkuPriceCalculatorFactory>();
+
+            // Act
+            var exception = Assert.Throws<SkuNotFoundException>(() => subject.Build(expectedItem));
+
+            // Assert
+            exception.Item.Should().Be(expectedItem);
+        }
+    }
+
+    public class SkuNotFoundException : Exception
+    {
+        public SkuNotFoundException(string item)
+        {
+            Item = item;
+        }
+
+        public string Item { get; private set; }
     }
 
     public interface IGetSkuWithMultiBuy
