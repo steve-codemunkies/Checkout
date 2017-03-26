@@ -67,6 +67,21 @@ namespace Checkout.Tests
             // Assert
             subject.TotalPrice().Should().Be(expectedPrice);
         }
+
+        [Fact]
+        public void WhenCalculatingThePriceForTwoItemsItShouldReturnTheCorrectPrice()
+        {
+            // Arrange
+            var item = AutoFixture.Create<string>();
+            var expectedPrice = AutoFixture.Create<int>();
+            var subject = new SkuPriceCalculator(item, expectedPrice);
+
+            // Act
+            subject.IncrementItemCount();
+
+            // Assert
+            subject.TotalPrice().Should().Be(expectedPrice * 2);
+        }
     }
 
     public class SkuPriceCalculator : ISkuPriceCalculator
